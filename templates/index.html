@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animal Selector and File Uploader</title>
+    <style>
+        /* Basic Reset */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 2em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .box {
+            background: #fff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            margin: 20px 0;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+
+        .box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        h2 {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .radio-group {
+            display: flex;
+            justify-content: space-around;
+            margin: 15px 0;
+        }
+
+        label {
+            font-size: 1.1em;
+            color: #555;
+        }
+
+        .image-container img {
+            width: 100%;
+            max-width: 250px;
+            height: auto;
+            margin-top: 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* File Upload */
+        .file-box input[type="file"] {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #fff;
+            font-size: 1em;
+            margin: 10px 0;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .file-box button {
+            background-color: #007bff;
+            color: #fff;
+            font-size: 1em;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .file-box button:hover {
+            background-color: #0056b3;
+        }
+
+        .file-details {
+            font-size: 1em;
+            color: #555;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Session 2 - Assignment</h1>
+
+    <!-- Animal Selector Box -->
+    <div class="box animal-box">
+        <h2>Select an Animal</h2>
+        <form id="animalForm">
+            <div class="radio-group">
+                <label><input type="radio" name="animal" value="cat" id="cat"> Cat</label>
+                <label><input type="radio" name="animal" value="dog" id="dog"> Dog</label>
+                <label><input type="radio" name="animal" value="elephant" id="elephant"> Elephant</label>
+            </div>
+        </form>
+        <div class="image-container" id="imageContainer">
+            <!-- Animal image will be displayed here -->
+        </div>
+    </div>
+
+    <!-- File Upload Box -->
+    <div class="box file-box">
+        <h2>Upload a File</h2>
+        <form id="fileForm" enctype="multipart/form-data">
+            <input type="file" id="fileInput" required>
+            <button type="submit">Upload</button>
+        </form>
+        <div class="file-details" id="fileDetails">
+            <!-- File details will be displayed here -->
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('animalForm').addEventListener('change', function() {
+            const selectedAnimal = document.querySelector('input[name="animal"]:checked').value;
+            const imageContainer = document.getElementById('imageContainer');
+            imageContainer.innerHTML = `<img src="/static/images/${selectedAnimal}.jpeg" alt="${selectedAnimal}">`;
+        });
+
+        document.getElementById('fileForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const fileInput = document.getElementById('fileInput').files[0];
+            if (fileInput) {
+                const formData = new FormData();
+                formData.append('file', fileInput);
+
+                fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const fileDetails = document.getElementById('fileDetails');
+                    fileDetails.innerHTML = `<p><strong>File Name:</strong> ${data.name}</p>
+                                             <p><strong>File Size:</strong> ${data.size} bytes</p>
+                                             <p><strong>File Type:</strong> ${data.type}</p>`;
+                });
+            }
+        });
+    </script>
+</body>
+</html>
