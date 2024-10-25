@@ -7,7 +7,7 @@
 </div>
 
 
-## Prompt:
+## Prompt
 
 Create a HTML/CSS/JS based front end which has 2 boxes.
 one box to select one of the 3 check-boxes (cat, dog, elephant)
@@ -17,7 +17,7 @@ If one uploads any file, then respond back with its name, file-size, and type
 You must use Flask as the backend to achieve this
 Create a more intuitive, user-friendly, and visually appealing UI, we can enhance the layout with some modern design touches like shadow effects, improved button styling, and distinct sections.
 
-## How to run:
+## How to run
 
 1. pip install -r requirements.txt
 2. python app.py
